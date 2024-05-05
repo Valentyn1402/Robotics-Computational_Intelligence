@@ -24,6 +24,10 @@ push the changes (create a pull request)
 
 # Installing ROS
 [//]: # "!!! ROS only works on Ubuntu Focal"
+!!! Important ROS Noetic work only on Ubuntu 20.04 Focal Fossa !!!
 1. Install ROS on your machine following tutorial: http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
 
 # Using ClickUp for Workflow Management 
+-> Coming soon
+
+
