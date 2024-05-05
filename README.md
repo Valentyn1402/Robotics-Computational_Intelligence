@@ -3,17 +3,27 @@ Repository for storing project code data
 This will be the main repo to exchange code files and other data which requires version control
 
 
-# Installing Ubuntu for Windows Machine 
-1. Download a virtual machine such as VirtualBox
-2. Download the latest stable realease of ubuntu:
-3. setup ubuntu in the virtual machine
+# Installing Ubuntu for Windows OS
+1. Download a virtual machine such as VirtualBox or VMware
+2. Download ubuntu which is compatible with ROS noetic https://ubuntu.com/download/desktop
+3. Install ubuntu in the virtual machine
 
 # Setting up Git/GitHub
-1. Fork this repository to your GitHub account
-2. Go to your GitHub account and look for the forked project
-3. Clone the project to your code editor or local repository
+1. Download Git for either Mac/Windows: https://git-scm.com/downloads
+2. Install Git 
+3. Create a GitHub account 
+4. Configure git: https://docs.github.com/en/get-started/getting-started-with-git/setting-your-username-in-git
+5. Go to GitHub and fork this repository to your account: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo
+6. Go to your GitHub account and look for the forked project
+7. Clone the project to your code editor or local repository: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
 
 # Contributing to this repository
-1. Make small commits such that the lose of code is minimzed
+1. Make small commits such that the loss of code is minimized
 2. Once you are ready to contribute the changes -> commit to the local repo and
 push the changes (create a pull request) 
+
+# Installing ROS
+[//]: # "!!! ROS only works on Ubuntu Focal"
+1. Install ROS on your machine following tutorial: http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
+
+# Using ClickUp for Workflow Management 
