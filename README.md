@@ -5,7 +5,7 @@ This will be the main repo to exchange code files and other data which requires 
 
 # Installing Ubuntu for Windows OS
 1. Download a virtual machine such as VirtualBox or VMware
-2. Download ubuntu which is compatible with ROS noetic https://ubuntu.com/download/desktop
+2. Download ubuntu 20.04 (Focal Fossa): https://releases.ubuntu.com/focal/
 3. Install ubuntu in the virtual machine
 
 # Setting up Git/GitHub
@@ -25,7 +25,10 @@ push the changes (create a pull request)
 # Installing ROS
 [//]: # "!!! ROS only works on Ubuntu Focal"
 !!! Important ROS Noetic work only on Ubuntu 20.04 Focal Fossa !!!
-1. Install ROS on your machine following tutorial: http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
+1. Install ROS on your machine following tutorial: http://wiki.ros.org/Installation/Ubuntu
+2. Each new terminal requires following command for ros to work: "source /opt/ros/noetic/setup.bash" for convinience setup the bash with following command:
+"echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc"
+
 
 # Using ClickUp for Workflow Management 
 -> Coming soon
