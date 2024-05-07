@@ -32,6 +32,7 @@ push the changes (create a pull request)
 
 # Using ClickUp for Workflow Management 
 -> Coming soon
+Introduction to ClickUp: https://help.clickup.com/hc/en-us/articles/9563959684119-Set-up-your-personal-Workspace
 
 ```mermaid
 flowchart LR
