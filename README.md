@@ -33,4 +33,11 @@ push the changes (create a pull request)
 # Using ClickUp for Workflow Management 
 -> Coming soon
 
+```mermaid
+flowchart LR
+    circle1((GitHub))
+    circle2((ClickUp/Jira))
+    circle1 --> circle2
+```
+
 
