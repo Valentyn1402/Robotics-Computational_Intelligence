@@ -1,0 +1,1 @@
+/home/jetson/workspace/catkin_ws/devel/.private/motor/share/common-lisp/ros/motor/msg/motor-msg.asd

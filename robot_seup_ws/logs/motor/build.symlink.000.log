@@ -1,0 +1,97 @@
+Symlinking /home/jetson/workspace/catkin_ws/devel/lib/pkgconfig/motor.pc
+Symlinking /home/jetson/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/__init__.py
+Symlinking /home/jetson/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/_MotorRPM.py
+Symlinking /home/jetson/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/_MotorPWM.py
+Symlinking /home/jetson/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/__init__.py
+Symlinking /home/jetson/workspace/catkin_ws/devel/include/motor/MotorPWM.h
+Symlinking /home/jetson/workspace/catkin_ws/devel/include/motor/MotorRPM.h
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/motor/cmake/motor-msg-paths.cmake
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/motor/cmake/motor-msg-extras.cmake
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/motor/cmake/motorConfig-version.cmake
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/motor/cmake/motorConfig.cmake
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/gennodejs/ros/motor/_index.js
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/MotorRPM.js
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/MotorPWM.js
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/_index.js
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/roseus/ros/motor/manifest.l
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/roseus/ros/motor/msg/MotorPWM.l
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/roseus/ros/motor/msg/MotorRPM.l
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/MotorRPM.lisp
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/motor-msg.asd
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package_MotorRPM.lisp
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package_MotorPWM.lisp
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package.lisp
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/MotorPWM.lisp
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/cmake.lock, /home/jetson/Desktop/workspace/catkin_ws/devel/./cmake.lock)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/lib/pkgconfig/motor.pc, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/motor.pc)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/lib/python3/dist-packages/motor/__init__.py, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/__init__.py)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/lib/python3/dist-packages/motor/msg/_MotorRPM.py, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/_MotorRPM.py)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/lib/python3/dist-packages/motor/msg/_MotorPWM.py, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/_MotorPWM.py)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/lib/python3/dist-packages/motor/msg/__init__.py, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/__init__.py)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/include/motor/MotorPWM.h, /home/jetson/Desktop/workspace/catkin_ws/devel/include/motor/MotorPWM.h)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/include/motor/MotorRPM.h, /home/jetson/Desktop/workspace/catkin_ws/devel/include/motor/MotorRPM.h)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/motor/cmake/motor-msg-paths.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motor-msg-paths.cmake)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/motor/cmake/motor-msg-extras.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motor-msg-extras.cmake)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/motor/cmake/motorConfig-version.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motorConfig-version.cmake)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/motor/cmake/motorConfig.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motorConfig.cmake)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/gennodejs/ros/motor/_index.js, /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/_index.js)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/gennodejs/ros/motor/msg/MotorRPM.js, /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/MotorRPM.js)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/gennodejs/ros/motor/msg/MotorPWM.js, /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/MotorPWM.js)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/gennodejs/ros/motor/msg/_index.js, /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/_index.js)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/roseus/ros/motor/manifest.l, /home/jetson/Desktop/workspace/catkin_ws/devel/share/roseus/ros/motor/manifest.l)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/roseus/ros/motor/msg/MotorPWM.l, /home/jetson/Desktop/workspace/catkin_ws/devel/share/roseus/ros/motor/msg/MotorPWM.l)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/roseus/ros/motor/msg/MotorRPM.l, /home/jetson/Desktop/workspace/catkin_ws/devel/share/roseus/ros/motor/msg/MotorRPM.l)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/common-lisp/ros/motor/msg/MotorRPM.lisp, /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/MotorRPM.lisp)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/common-lisp/ros/motor/msg/motor-msg.asd, /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/motor-msg.asd)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/common-lisp/ros/motor/msg/_package_MotorRPM.lisp, /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package_MotorRPM.lisp)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/common-lisp/ros/motor/msg/_package_MotorPWM.lisp, /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package_MotorPWM.lisp)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/common-lisp/ros/motor/msg/_package.lisp, /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package.lisp)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/motor/share/common-lisp/ros/motor/msg/MotorPWM.lisp, /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/MotorPWM.lisp)
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/motor.pc
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/__init__.py
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/_MotorRPM.py
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/_MotorPWM.py
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/python3/dist-packages/motor/msg/__init__.py
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/include/motor/MotorPWM.h
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/include/motor/MotorRPM.h
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motor-msg-paths.cmake
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motor-msg-extras.cmake
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motorConfig-version.cmake
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/motor/cmake/motorConfig.cmake
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/_index.js
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/MotorRPM.js
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/MotorPWM.js
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/gennodejs/ros/motor/msg/_index.js
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/roseus/ros/motor/manifest.l
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/roseus/ros/motor/msg/MotorPWM.l
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/roseus/ros/motor/msg/MotorRPM.l
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/MotorRPM.lisp
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/motor-msg.asd
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package_MotorRPM.lisp
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package_MotorPWM.lisp
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/_package.lisp
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/common-lisp/ros/motor/msg/MotorPWM.lisp
+Already unlinked: {}

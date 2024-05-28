@@ -1,0 +1,13 @@
+Symlinking /home/jetson/workspace/catkin_ws/devel/lib/pkgconfig/imu.pc
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/imu/cmake/imuConfig-version.cmake
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/imu/cmake/imuConfig.cmake
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/imu/cmake.lock, /home/jetson/Desktop/workspace/catkin_ws/devel/./cmake.lock)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/imu/lib/pkgconfig/imu.pc, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/imu.pc)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/imu/share/imu/cmake/imuConfig-version.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/imu/cmake/imuConfig-version.cmake)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/imu/share/imu/cmake/imuConfig.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/imu/cmake/imuConfig.cmake)
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/imu.pc
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/imu/cmake/imuConfig-version.cmake
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/imu/cmake/imuConfig.cmake
+Already unlinked: {}
