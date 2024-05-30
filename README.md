@@ -44,6 +44,8 @@ flowchart LR
 
 -> make sure to enable "bridged adapter" in the virtual machine box settings !!!!
 
+-> when running a node make sure that "export ROS_MASTER_URI=http://ip-of-master-ros:11311" is set aswell as "export ROS_IP=192.167.170.251"
+
 -> Make sure that the machine you want to connect to jetson has openSSH client installed, so that the connection can be made between the machine and jetson 
 
 -> use command sudo systemctl status ssh to make sure the server is running on jetson 
