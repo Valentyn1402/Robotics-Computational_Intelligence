@@ -40,5 +40,14 @@ flowchart LR
     circle2((ClickUp/Jira))
     circle1 --> circle2
 ```
+# SSH + ROSClient/Server Setup
 
+-> make sure to enable "bridged adapter" in the virtual machine box settings !!!!
 
+-> Make sure that the machine you want to connect to jetson has openSSH client installed, so that the connection can be made between the machine and jetson 
+
+-> use command sudo systemctl status ssh to make sure the server is running on jetson 
+
+-> Type hostname -I to get the ip adress of the jetson and connect to it using ssh jetson@jetson-ip-address command 
+
+-> check the connection by typing who -a to see all ssh connections or by pinging the ip address both ways
