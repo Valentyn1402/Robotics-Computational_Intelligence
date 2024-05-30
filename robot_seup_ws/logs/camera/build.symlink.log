@@ -1,0 +1,13 @@
+Symlinking /home/jetson/workspace/catkin_ws/devel/lib/pkgconfig/camera.pc
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/camera/cmake/cameraConfig-version.cmake
+Symlinking /home/jetson/workspace/catkin_ws/devel/share/camera/cmake/cameraConfig.cmake
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/camera/cmake.lock, /home/jetson/Desktop/workspace/catkin_ws/devel/./cmake.lock)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/camera/lib/pkgconfig/camera.pc, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/camera.pc)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/camera/share/camera/cmake/cameraConfig-version.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/camera/cmake/cameraConfig-version.cmake)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/camera/share/camera/cmake/cameraConfig.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/camera/cmake/cameraConfig.cmake)
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/camera.pc
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/camera/cmake/cameraConfig-version.cmake
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/camera/cmake/cameraConfig.cmake
+Already unlinked: {}

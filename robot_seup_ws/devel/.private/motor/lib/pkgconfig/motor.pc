@@ -1,0 +1,8 @@
+prefix=/home/jetson/workspace/catkin_ws/devel/.private/motor
+
+Name: motor
+Description: Description of motor
+Version: 0.0.0
+Cflags: -I/home/jetson/workspace/catkin_ws/devel/.private/motor/include
+Libs: -L${prefix}/lib 
+Requires: roscpp rospy

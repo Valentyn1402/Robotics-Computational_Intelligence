@@ -1,0 +1,10 @@
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/demo/cmake.lock, /home/jetson/Desktop/workspace/catkin_ws/devel/./cmake.lock)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/demo/lib/pkgconfig/demo.pc, /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/demo.pc)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/demo/share/demo/cmake/demoConfig-version.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/demo/cmake/demoConfig-version.cmake)
+Cleaning: (/home/jetson/Desktop/workspace/catkin_ws/devel/.private/demo/share/demo/cmake/demoConfig.cmake, /home/jetson/Desktop/workspace/catkin_ws/devel/share/demo/cmake/demoConfig.cmake)
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/lib/pkgconfig/demo.pc
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/demo/cmake/demoConfig-version.cmake
+Already unlinked: {}
+Unlinking: /home/jetson/Desktop/workspace/catkin_ws/devel/share/demo/cmake/demoConfig.cmake
+Already unlinked: {}

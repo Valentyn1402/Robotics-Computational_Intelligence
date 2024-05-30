@@ -1,0 +1,1 @@
+/home/jetson/workspace/catkin_ws/devel/.private/motor/share/roseus/ros/motor/manifest.l

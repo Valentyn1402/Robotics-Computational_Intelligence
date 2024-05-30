@@ -1,0 +1,1 @@
+/home/jetson/workspace/catkin_ws/devel/.private/camera/lib/pkgconfig/camera.pc
