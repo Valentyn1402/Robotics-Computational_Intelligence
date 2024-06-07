@@ -40,16 +40,46 @@ flowchart LR
     circle2((ClickUp/Jira))
     circle1 --> circle2
 ```
-# SSH + ROSClient/Server Setup
+# SSH + ROS Client/Server Setup
 
--> make sure to enable "bridged adapter" in the virtual machine box settings !!!!
+## SSH Setup
+
+1. make sure that "bridged adapter" option is enabled in virtual machine settings
+
+2. Connect to the same network
+
+3. Make sure that OpenSSH Client is installed on your machine
+
+4. Make sure that the OpenSSH Server is running on jetson with ```sudo systemctl status ssh```
+
+4. To ensure that connection is established both ways, type ```ping <ip-address>``` on both machines, if not sure use ```hostname -I``` to identify the IP address
+
+5. Connect to jetson using its ip adress and typing ```ssh jetson@jetson-ip-address``` command 
+
+## Using ROS to Application
+
+1. Chose on the machine to run roscore and run it 
+
+2. connect to ssh using ```ssh <machine-name>``` on both machines
+
+3. Make sure to specify the ip-address where the rosmaster is running from with ```ROS_MASTER_URI=http://ip-of-master-ros:11311```
+
+4. Set ```export ROS_IP=<ip-address of machine>```  to ensure that the topic knows from where its information 
 
 -> when running a node make sure that "export ROS_MASTER_URI=http://ip-of-master-ros:11311" is set aswell as "export ROS_IP=192.167.170.251"
 
--> Make sure that the machine you want to connect to jetson has openSSH client installed, so that the connection can be made between the machine and jetson 
-
--> use command sudo systemctl status ssh to make sure the server is running on jetson 
 
 -> Type hostname -I to get the ip adress of the jetson and connect to it using ssh jetson@jetson-ip-address command 
 
 -> check the connection by typing who -a to see all ssh connections or by pinging the ip address both ways
+
+
+## Setting Static IP address
+
+-> Current static IP address is 192.168.1.100
+
+1. Search for the ls /etc/netplan and find the configuration file 
+
+2. Open the netplan file with sudo nano /etc/netplan/config_file.yaml
+
+3. change the IP address in the line called "addresses" and apply the changes using sudo netplan apply
