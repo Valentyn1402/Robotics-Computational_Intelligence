@@ -2,6 +2,7 @@ import itertools
 import random
 from datetime import datetime
 from typing import Optional
+from tkinter import font, ttk
 import tkinter as tk
 
 import numpy as np
@@ -12,7 +13,7 @@ from djikstra import djikstra
 class Maze:
     def __init__(self, width: int, height: int, seed: Optional[int] = None):
         if seed is None:
-            seed = datetime.now().timestamp()
+            seed = int(datetime.now().timestamp())
 
         self.width: int = width
         self.height: int = height
@@ -163,7 +164,7 @@ class Maze:
                 if move_failed:
                     break
 
-    def draw_maze(self, scale=50, wall_width=2, distances: Optional[dict[tuple[int, int], float]] = None, shortest_path: Optional[list[tuple[int, int]]] = None):
+    def draw_maze(self, scale=100, wall_width=2, distances: Optional[dict[tuple[int, int], float]] = None, shortest_path: Optional[list[tuple[int, int]]] = None):
         """
         Draw the maze using tkinter. Each cell should be a square.
         The connectivity matrix should be used to determine which walls to draw.
@@ -177,6 +178,8 @@ class Maze:
         window = tk.Tk()
         window.title("Maze")
         window.geometry(f"{self.width * scale}x{self.height * scale}")
+        print(sorted(font.families()))
+        font_ = font.Font(family='arial', size=16, weight='bold')
 
         # create the canvas
         canvas = tk.Canvas(window, width=self.width * scale, height=self.height * scale)
@@ -188,35 +191,69 @@ class Maze:
         canvas.create_rectangle(start_x * scale, start_y * scale, start_x * scale + scale, start_y * scale + scale, fill="blue",
                                 outline="")
         canvas.create_rectangle(end_x * scale, end_y * scale, end_x * scale + scale, end_y * scale + scale, fill="red", outline="")
+        # write start and end
+        if distances:
+            canvas.create_text(start_x * scale + scale // 2, start_y * scale + scale // 2 - int(scale/5), text="START", font=font_)
+            canvas.create_text(end_x * scale + scale // 2, end_y * scale + scale // 2 - int(scale/5), text="END", font=font_)
+        else:
+            canvas.create_text(start_x * scale + scale // 2, start_y * scale + scale // 2, text="START", font=font_)
+            canvas.create_text(end_x * scale + scale // 2, end_y * scale + scale // 2, text="END", font=font_)
 
         #draw the maze
         for x, y in itertools.product(range(self.width), range(self.height)):
-            if not self.connectivity_matrix[x, y, 0]:
-                canvas.create_line(x * scale, y * scale, x * scale + scale, y * scale, width=wall_width)
-            if not self.connectivity_matrix[x, y, 1]:
-                canvas.create_line(x * scale, y * scale + scale, x * scale + scale, y * scale + scale, width=wall_width)
-            if not self.connectivity_matrix[x, y, 2]:
-                canvas.create_line(x * scale + scale, y * scale, x * scale + scale, y * scale + scale, width=wall_width)
-            if not self.connectivity_matrix[x, y, 3]:
-                canvas.create_line(x * scale, y * scale, x * scale, y * scale + scale, width=wall_width)
+            canvas.create_line(
+                x * scale,
+                y * scale,
+                x * scale + scale,
+                y * scale,
+                width=wall_width,
+                fill=("lightgray"if self.connectivity_matrix[x, y, 0] else "black")
+            )
+            canvas.create_line(
+                x * scale + scale,
+                y * scale,
+                x * scale + scale,
+                y * scale + scale,
+                width=wall_width,
+                fill=("lightgray" if self.connectivity_matrix[x, y, 1] else "black")
+            )
+            canvas.create_line(
+                x * scale,
+                y * scale + scale,
+                x * scale + scale,
+                y * scale + scale,
+                width=wall_width,
+                fill=("lightgray" if self.connectivity_matrix[x, y, 2] else "black")
+            )
+            canvas.create_line(
+                x * scale,
+                y * scale,
+                x * scale,
+                y * scale + scale,
+                width=wall_width,
+                fill=("lightgray" if self.connectivity_matrix[x, y, 3] else "black")
+            )
 
         if shortest_path:
             for i in range(len(shortest_path) - 1):
                 x1, y1 = shortest_path[i]
                 x2, y2 = shortest_path[i + 1]
-                canvas.create_line(x1 * scale + scale // 2, y1 * scale + scale // 2, x2 * scale + scale // 2, y2 * scale + scale // 2, fill="green", width=2)
+                canvas.create_line(x1 * scale + scale // 2, y1 * scale + scale // 2, x2 * scale + scale // 2, y2 * scale + scale // 2, fill="yellow", width=4)
 
         if distances:
             for coord, dist in distances.items():
                 x, y = coord
-                canvas.create_text(x * scale + scale // 2, y * scale + scale // 2, text=str(dist))
+                canvas.create_text(x * scale + scale // 2, y * scale + scale // 2, text=str(dist), font=font_)
 
         # run the tkinter main loop
         window.mainloop()
 
 
 def main():
-    maze = Maze(4, 4)
+    # seed: 1718364844
+    # seed: 1718365623
+    # seed: 1718526565
+    maze = Maze(4, 4, seed=1718526565)
     dist, prev = djikstra(maze.connectivity_matrix, maze.start_coordinate)
 
     node = maze.goal_coordinate
@@ -226,6 +263,7 @@ def main():
         shortest_path.append(node)
 
     maze.draw_maze(distances=dist, shortest_path=shortest_path)
+    #maze.draw_maze()
     print()
 
 if __name__ == "__main__":
