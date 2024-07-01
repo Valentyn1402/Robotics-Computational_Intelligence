@@ -83,3 +83,15 @@ flowchart LR
 2. Open the netplan file with sudo nano /etc/netplan/config_file.yaml
 
 3. change the IP address in the line called "addresses" and apply the changes using sudo netplan apply
+
+## AprilTag Setup for ROS
+
+**Beachten!!!**:
+ Das apriltag_ros repository nicht in den catkin workspace installieren, sondern über apt ros-noetic-apriltag-ros installieren
+
+**Bedienung**
+
+1. Im Terminal roscore starten 
+2. Kamera einstellen mit roslaunch camera mono_can_rect.launch
+3. Apriltagerkennung starten roslaunch apriltag_ros continuous_detection.launch 
+
