@@ -7,7 +7,8 @@ import tkinter as tk
 
 import numpy as np
 
-from djikstra import djikstra
+from src.dijkstra import dijkstra, Node
+from src.a_star import a_star
 
 
 class Maze:
@@ -164,7 +165,7 @@ class Maze:
                 if move_failed:
                     break
 
-    def draw_maze(self, scale=100, wall_width=2, distances: Optional[dict[tuple[int, int], float]] = None, shortest_path: Optional[list[tuple[int, int]]] = None):
+    def draw_maze(self, scale=100, wall_width=2, distances: Optional[dict[tuple[int, int], Node]] = None, shortest_path: Optional[list[Node]] = None):
         """
         Draw the maze using tkinter. Each cell should be a square.
         The connectivity matrix should be used to determine which walls to draw.
@@ -178,7 +179,7 @@ class Maze:
         window = tk.Tk()
         window.title("Maze")
         window.geometry(f"{self.width * scale}x{self.height * scale}")
-        print(sorted(font.families()))
+        #print(sorted(font.families()))
         font_ = font.Font(family='arial', size=16, weight='bold')
 
         # create the canvas
@@ -236,14 +237,14 @@ class Maze:
 
         if shortest_path:
             for i in range(len(shortest_path) - 1):
-                x1, y1 = shortest_path[i]
-                x2, y2 = shortest_path[i + 1]
+                x1, y1 = shortest_path[i].coord
+                x2, y2 = shortest_path[i + 1].coord
                 canvas.create_line(x1 * scale + scale // 2, y1 * scale + scale // 2, x2 * scale + scale // 2, y2 * scale + scale // 2, fill="yellow", width=4)
 
         if distances:
-            for coord, dist in distances.items():
+            for coord, node in distances.items():
                 x, y = coord
-                canvas.create_text(x * scale + scale // 2, y * scale + scale // 2, text=str(dist), font=font_)
+                canvas.create_text(x * scale + scale // 2, y * scale + scale // 2, text=f"{node.dist}", font=font_)
 
         # run the tkinter main loop
         window.mainloop()
@@ -253,13 +254,22 @@ def main():
     # seed: 1718364844
     # seed: 1718365623
     # seed: 1718526565
-    maze = Maze(4, 4, seed=1718526565)
-    dist, prev = djikstra(maze.connectivity_matrix, maze.start_coordinate)
 
-    node = maze.goal_coordinate
+    #a_star:
+    # seed: 1719257926
+
+    # perfect maze:
+    # seed: 1719261105
+
+    #  error: 1719261183
+    maze = Maze(4, 4)
+    dist = dijkstra(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+    dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+
+    node = dist[maze.goal_coordinate]
     shortest_path = [node]
-    while node != maze.start_coordinate:
-        node = prev[node]
+    while node.coord != maze.start_coordinate:
+        node = node.prev
         shortest_path.append(node)
 
     maze.draw_maze(distances=dist, shortest_path=shortest_path)
