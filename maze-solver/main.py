@@ -29,6 +29,13 @@ class Maze:
         # Set the seed for reproducibility
         random.seed(seed)
 
+    @staticmethod
+    def from_tags(tags: Path, tile_size: float = 0.25, wall_thickness: float = 0.003):
+        cm, width, height = src.tags_parser.parse(tags, tile_size, wall_thickness)
+        maze = Maze(width, height)
+        maze.connectivity_matrix = cm
+        return maze
+
     def generate(self):
         # Set the start and end coordinates
         self.set_random_start_end()
@@ -284,8 +291,7 @@ def main():
     # maze.draw_maze(distances=dist, shortest_path=shortest_path)
     #maze.draw_maze()
 
-    maze = Maze(3, 3)
-    maze.connectivity_matrix = src.tags_parser.parse(Path('tags.yaml'))
+    maze = Maze.from_tags(Path('tags.yaml'))
     maze.start_coordinate = (1, 0)
     maze.goal_coordinate = (2, 2)
     dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)

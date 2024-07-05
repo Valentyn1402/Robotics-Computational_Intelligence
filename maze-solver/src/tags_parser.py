@@ -33,8 +33,6 @@ def parse(file: Path, tile_size: float = 0.25, wall_thickness: float = 0.003):
     width = int(max_y / tile_size)
     height = int(max_x / tile_size)
 
-    print(f"Maze shape: {width}x{height}")
-
     # 2 = right, 3 = left, 1 = down, 0 = up
     connectivity_matrix = np.zeros((width, height, 4), dtype=bool)
 
@@ -46,13 +44,12 @@ def parse(file: Path, tile_size: float = 0.25, wall_thickness: float = 0.003):
 
     for x, y in itertools.product(range(0, width), range(0, height - 1)):
         c_col = (
-        x * (tile_size + wall_thickness) + tile_size / 2 + wall_thickness, (y + 1) * (tile_size + wall_thickness))
+            x * (tile_size + wall_thickness) + tile_size / 2 + wall_thickness, (y + 1) * (tile_size + wall_thickness))
         if c_col not in walls:
             connectivity_matrix[x, y, 1] = True
             connectivity_matrix[x, y + 1, 0] = True
 
-
-    return connectivity_matrix
+    return connectivity_matrix, width, height
 
 
 if __name__ == '__main__':
