@@ -24,7 +24,6 @@ class Maze:
         self.start_coordinate: Optional[tuple] = None
         self.goal_coordinate: Optional[tuple] = None
         self.seed: int = seed
-        print(f"seed: {seed}")
 
         # Set the seed for reproducibility
         random.seed(seed)
@@ -37,6 +36,8 @@ class Maze:
         return maze
 
     def generate(self):
+        print(f"seed: {self.seed}")
+
         # Set the start and end coordinates
         self.set_random_start_end()
         print(f"start: {self.start_coordinate}")
@@ -306,5 +307,27 @@ def main():
     print()
 
 
+def get_path(tags_file: Path, start: tuple[int, int], end: tuple[int, int], tile_size: float = 0.25,
+             wall_thickness: float = 0.003):
+    maze = Maze.from_tags(tags_file)
+    maze.start_coordinate = start
+    maze.goal_coordinate = end
+    dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+
+    node = dist[maze.goal_coordinate]
+    shortest_path = [node]
+    while node.coord != maze.start_coordinate:
+        node = node.prev
+        shortest_path.append(node)
+
+    coordinates = [
+        np.array(node.coord) * (tile_size + wall_thickness) + tile_size / 2 + wall_thickness
+        for node in reversed(shortest_path)
+    ]
+
+    return coordinates
+
+
 if __name__ == "__main__":
-    main()
+    path = get_path(tags_file=Path('tags.yaml'), start=(1, 0), end=(2, 2))
+    print(path)

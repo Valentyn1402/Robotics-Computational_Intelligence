@@ -16,7 +16,7 @@ def parse(file: Path, tile_size: float = 0.25, wall_thickness: float = 0.003):
         tags = yaml.safe_load(f)
 
     bundle = tags['tag_bundles'][0]
-    print(bundle['name'])
+    print(f"Loaded bundle '{bundle['name']}' from {file}")
 
     layout: list[dict[str, float]] = bundle['layout']
 
