@@ -1,11 +1,13 @@
 import itertools
 import random
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
 from tkinter import font, ttk
 import tkinter as tk
 
 import numpy as np
+import src.tags_parser
 
 from src.dijkstra import dijkstra, Node
 from src.a_star import a_star
@@ -27,6 +29,7 @@ class Maze:
         # Set the seed for reproducibility
         random.seed(seed)
 
+    def generate(self):
         # Set the start and end coordinates
         self.set_random_start_end()
         print(f"start: {self.start_coordinate}")
@@ -36,8 +39,8 @@ class Maze:
         self.create_branch_paths()
         print(f"path: {self.path}")
 
-        #Update the connectivity matrix
-        for i in range(len(self.path)-1):
+        # Update the connectivity matrix
+        for i in range(len(self.path) - 1):
             current_coordinate = self.path[i]
             next_coordinate = self.path[i + 1]
 
@@ -165,7 +168,8 @@ class Maze:
                 if move_failed:
                     break
 
-    def draw_maze(self, scale=100, wall_width=2, distances: Optional[dict[tuple[int, int], Node]] = None, shortest_path: Optional[list[Node]] = None):
+    def draw_maze(self, scale=100, wall_width=2, distances: Optional[dict[tuple[int, int], Node]] = None,
+                  shortest_path: Optional[list[Node]] = None):
         """
         Draw the maze using tkinter. Each cell should be a square.
         The connectivity matrix should be used to determine which walls to draw.
@@ -189,13 +193,17 @@ class Maze:
         # draw the start and end coordinates
         start_x, start_y = self.start_coordinate
         end_x, end_y = self.goal_coordinate
-        canvas.create_rectangle(start_x * scale, start_y * scale, start_x * scale + scale, start_y * scale + scale, fill="blue",
+        canvas.create_rectangle(start_x * scale, start_y * scale, start_x * scale + scale, start_y * scale + scale,
+                                fill="blue",
                                 outline="")
-        canvas.create_rectangle(end_x * scale, end_y * scale, end_x * scale + scale, end_y * scale + scale, fill="red", outline="")
+        canvas.create_rectangle(end_x * scale, end_y * scale, end_x * scale + scale, end_y * scale + scale, fill="red",
+                                outline="")
         # write start and end
         if distances:
-            canvas.create_text(start_x * scale + scale // 2, start_y * scale + scale // 2 - int(scale/5), text="START", font=font_)
-            canvas.create_text(end_x * scale + scale // 2, end_y * scale + scale // 2 - int(scale/5), text="END", font=font_)
+            canvas.create_text(start_x * scale + scale // 2, start_y * scale + scale // 2 - int(scale / 5),
+                               text="START", font=font_)
+            canvas.create_text(end_x * scale + scale // 2, end_y * scale + scale // 2 - int(scale / 5), text="END",
+                               font=font_)
         else:
             canvas.create_text(start_x * scale + scale // 2, start_y * scale + scale // 2, text="START", font=font_)
             canvas.create_text(end_x * scale + scale // 2, end_y * scale + scale // 2, text="END", font=font_)
@@ -208,7 +216,7 @@ class Maze:
                 x * scale + scale,
                 y * scale,
                 width=wall_width,
-                fill=("lightgray"if self.connectivity_matrix[x, y, 0] else "black")
+                fill=("lightgray" if self.connectivity_matrix[x, y, 0] else "black")
             )
             canvas.create_line(
                 x * scale + scale,
@@ -239,7 +247,8 @@ class Maze:
             for i in range(len(shortest_path) - 1):
                 x1, y1 = shortest_path[i].coord
                 x2, y2 = shortest_path[i + 1].coord
-                canvas.create_line(x1 * scale + scale // 2, y1 * scale + scale // 2, x2 * scale + scale // 2, y2 * scale + scale // 2, fill="yellow", width=4)
+                canvas.create_line(x1 * scale + scale // 2, y1 * scale + scale // 2, x2 * scale + scale // 2,
+                                   y2 * scale + scale // 2, fill="yellow", width=4)
 
         if distances:
             for coord, node in distances.items():
@@ -262,8 +271,23 @@ def main():
     # seed: 1719261105
 
     #  error: 1719261183
-    maze = Maze(4, 4)
-    dist = dijkstra(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+    #maze = Maze(4, 4)
+    # dist = dijkstra(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+    # dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+    #
+    # node = dist[maze.goal_coordinate]
+    # shortest_path = [node]
+    # while node.coord != maze.start_coordinate:
+    #     node = node.prev
+    #     shortest_path.append(node)
+    #
+    # maze.draw_maze(distances=dist, shortest_path=shortest_path)
+    #maze.draw_maze()
+
+    maze = Maze(3, 3)
+    maze.connectivity_matrix = src.tags_parser.parse(Path('tags.yaml'))
+    maze.start_coordinate = (1, 0)
+    maze.goal_coordinate = (2, 2)
     dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
 
     node = dist[maze.goal_coordinate]
@@ -273,8 +297,8 @@ def main():
         shortest_path.append(node)
 
     maze.draw_maze(distances=dist, shortest_path=shortest_path)
-    #maze.draw_maze()
     print()
+
 
 if __name__ == "__main__":
     main()
