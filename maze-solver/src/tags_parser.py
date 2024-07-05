@@ -37,7 +37,7 @@ def parse(file: Path, tile_size: float = 0.25, wall_thickness: float = 0.003):
     connectivity_matrix = np.zeros((width, height, 4), dtype=bool)
 
     for x, y in itertools.product(range(0, width - 1), range(0, height)):
-        c_row = ((x + 1) * tile_size + wall_thickness, y * tile_size + tile_size / 2 + wall_thickness)
+        c_row = ((x + 1) * (tile_size + wall_thickness), y * (tile_size + wall_thickness) + tile_size / 2 + wall_thickness)
         if c_row not in walls:
             connectivity_matrix[x, y, 2] = True
             connectivity_matrix[x + 1, y, 3] = True

@@ -292,7 +292,7 @@ def main():
     # maze.draw_maze(distances=dist, shortest_path=shortest_path)
     #maze.draw_maze()
 
-    maze = Maze.from_tags(Path('tags.yaml'))
+    maze = Maze.from_tags(Path('tags_real.yaml'))
     maze.start_coordinate = (1, 0)
     maze.goal_coordinate = (2, 2)
     dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
@@ -329,5 +329,6 @@ def get_path(tags_file: Path, start: tuple[int, int], end: tuple[int, int], tile
 
 
 if __name__ == "__main__":
-    path = get_path(tags_file=Path('tags.yaml'), start=(1, 0), end=(2, 2))
-    print(path)
+    # path = get_path(tags_file=Path('tags.yaml'), start=(1, 0), end=(2, 2))
+    # print(path)
+    main()
