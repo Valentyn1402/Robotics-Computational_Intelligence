@@ -46,13 +46,16 @@ flowchart LR
 
 1. make sure that "bridged adapter" option is enabled in virtual machine settings
 
-2. Connect to the same network
+2. Make sure both robot and compuer are connected to the same network
 
 3. Make sure that OpenSSH Client is installed on your machine
 
 4. Make sure that the OpenSSH Server is running on jetson with ```sudo systemctl status ssh```
 
-4. To ensure that connection is established both ways, type ```ping <ip-address>``` on both machines, if not sure use ```hostname -I``` to identify the IP address
+4. Try pinging each machine to itself, if not sure what the hostname of machine is type: ```hostname```
+afterwards type ```ssh <machine_name>``` and ping it with ```ping <machine_name>```
+
+4. To ensure that connection is established both ways, type ```ping <ip-address>``` on both machines, if pinging machine name doesn't work, try ```hostname -I``` and ping the IP address
 
 5. Connect to jetson using its ip adress and typing ```ssh jetson@jetson-ip-address``` command 
 
