@@ -109,11 +109,22 @@ class Controller():
         
         #for angles between 0 and pi chassis should rotate clockwise 
         if np.pi > angle_error > 0:
-            self.u_cont[0] = u - (self.axle_length/2)*angle_error - pid_error
-            self.u_cont[1] = u + (self.axle_length/2)*angle_error + pid_error
+            #making sure the inputs do not exceed the boundries [-1.0, 1.0]
+            if (u - (self.axle_length/2)*angle_error - pid_error) < self.u_min:
+                self.u_cont[0] = self.u_min
+            elif (u + (self.axle_length/2)*angle_error + pid_error) > self.u_max:
+                self.u_cont[1] = self.u_max
+            else:
+                self.u_cont[0] = u - (self.axle_length/2)*angle_error - pid_error
+                self.u_cont[1] = u + (self.axle_length/2)*angle_error + pid_error
         else:
-            self.u_cont[0] = u + (self.axle_length/2)*angle_error + pid_error
-            self.u_cont[1] = u - (self.axle_length/2)*angle_error - pid_error
+            if (u - (self.axle_length/2)*angle_error - pid_error) < self.u_min:
+                self.u_cont[1] = self.u_min
+            elif (u + (self.axle_length/2)*angle_error + pid_error) > self.u_max:
+                self.u_cont[0] = self.u_max
+            else:
+                self.u_cont[0] = u + (self.axle_length/2)*angle_error + pid_error
+                self.u_cont[1] = u - (self.axle_length/2)*angle_error - pid_error
 
         return self.u_cont
 
@@ -125,12 +136,16 @@ class Controller():
         for coordinate in self.path:
             #for each point check if the distance between the middle point of the
             #chassis is close enough to the coordinate, if not run the control loop
-            while np.linalg.norm(q[1:] - coordinate) > self.epsilon: 
+            while np.linalg.norm(self.pose[1:] - coordinate) > self.epsilon: 
                 #Regelung 
                 #first calculate the required inputs
-                u_cont = self.calculate_inputs(q, coordinate)
+                self.u_cont = self.calculate_inputs(self.pose, coordinate)
+                #update position based on perfect model
+                self.v = (self.u_cont[0] + self.u_cont[1])/2
+                #update the angle
+                self.theta = ((self.u_cont[1] - self.u_cont[2])/self.axle_length)*self.dt
                 #pass the controller inputs to the motors
-                self.adjust_position(u_cont)
+                self.adjust_position(self.u_cont)
                 #get new approximation for the position to 
-                q = location.get_location()
+                self.pose = location.get_location()
 
