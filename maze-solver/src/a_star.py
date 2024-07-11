@@ -1,14 +1,15 @@
 import itertools
+from typing import Tuple
 
 import numpy as np
 
 import src.dijkstra
 
-coordinate = tuple[int, int]
+coordinate = Tuple[int, int]
 
 
 class Node(src.dijkstra.Node):
-    def __init__(self, coord: tuple[int, int], dist: float, heuristic: float):
+    def __init__(self, coord: Tuple[int, int], dist: float, heuristic: float):
         super().__init__(coord, dist)
         self.heuristic: float = heuristic
 
@@ -16,7 +17,7 @@ class Node(src.dijkstra.Node):
         return self.dist + self.heuristic < other.dist + other.heuristic
 
 
-def a_star(graph: np.ndarray, start: tuple[int, int], goal: tuple[int, int]):
+def a_star(graph: np.ndarray, start: Tuple[int, int], goal: Tuple[int, int]):
     steps = 0
 
     dist: dict[coordinate, Node] = {}
@@ -76,4 +77,4 @@ def a_star(graph: np.ndarray, start: tuple[int, int], goal: tuple[int, int]):
         if update:
             nodes.sort()
 
-    return dist
+    return dist, steps

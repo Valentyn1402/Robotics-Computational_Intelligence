@@ -1,10 +1,10 @@
 import functools
 import itertools
-from typing import Optional
+from typing import Optional, Tuple, List
 
 import numpy as np
 
-coordinate = tuple[int, int]
+coordinate = Tuple[int, int]
 
 
 @functools.total_ordering
@@ -24,11 +24,11 @@ class Node:
         return f"Node({self.coord}, {self.dist})"
 
 
-def dijkstra(graph: np.ndarray, start: tuple[int, int], goal: tuple[int, int]):
+def dijkstra(graph: np.ndarray, start: Tuple[int, int], goal: Tuple[int, int]):
     steps = 0
 
     dist: dict[coordinate, Node] = {}
-    nodes: list[Node] = list()
+    nodes: List[Node] = list()
 
     for coord in itertools.product(range(graph.shape[0]), range(graph.shape[1])):
         if coord == start:
@@ -81,4 +81,4 @@ def dijkstra(graph: np.ndarray, start: tuple[int, int], goal: tuple[int, int]):
         if update:
             nodes.sort()
 
-    return dist
+    return dist, steps

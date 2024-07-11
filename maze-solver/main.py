@@ -1,16 +1,16 @@
 import itertools
 import random
+import tkinter as tk
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
-from tkinter import font, ttk
-import tkinter as tk
+from tkinter import font
+from typing import Optional, Tuple, Set, List, Dict
 
 import numpy as np
-import src.tags_parser
 
-from src.dijkstra import dijkstra, Node
+import src.tags_parser
 from src.a_star import a_star
+from src.dijkstra import dijkstra, Node
 
 
 class Maze:
@@ -93,7 +93,7 @@ class Maze:
     def find_random_path(self):
         return self.find_random_path_recursive(np.array(self.start_coordinate), {self.start_coordinate})
 
-    def find_random_path_recursive(self, current_coordinate: np.ndarray, path_set: set[tuple[int, int]]):
+    def find_random_path_recursive(self, current_coordinate: np.ndarray, path_set: Set[Tuple[int, int]]):
         if tuple(current_coordinate) == self.goal_coordinate:
             return [current_coordinate]
 
@@ -176,8 +176,8 @@ class Maze:
                 if move_failed:
                     break
 
-    def draw_maze(self, scale=100, wall_width=2, distances: Optional[dict[tuple[int, int], Node]] = None,
-                  shortest_path: Optional[list[Node]] = None):
+    def draw_maze(self, scale=100, wall_width=2, distances: Optional[Dict[Tuple[int, int], Node]] = None,
+                  shortest_path: Optional[List[Node]] = None):
         """
         Draw the maze using tkinter. Each cell should be a square.
         The connectivity matrix should be used to determine which walls to draw.
@@ -292,27 +292,43 @@ def main():
     # maze.draw_maze(distances=dist, shortest_path=shortest_path)
     #maze.draw_maze()
 
-    maze = Maze.from_tags(Path('tags_real.yaml'))
-    maze.start_coordinate = (1, 0)
-    maze.goal_coordinate = (2, 2)
-    dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+    #maze = Maze.from_tags(Path('tags_kangyi.yaml'))
+    #maze.start_coordinate = (0, 3)
+    #maze.goal_coordinate = (0, 1)
+    a_steps = 0
+    d_steps = 0
 
-    node = dist[maze.goal_coordinate]
-    shortest_path = [node]
-    while node.coord != maze.start_coordinate:
-        node = node.prev
-        shortest_path.append(node)
+    steps = 10000
 
-    maze.draw_maze(distances=dist, shortest_path=shortest_path)
+    for _ in range(steps):
+
+        maze = Maze(4, 4, seed=random.randint(0, 1000000000))
+        maze.generate()
+        dist, ds = dijkstra(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+        dist, da = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+
+        a_steps += da
+        d_steps += ds
+
+        node = dist[maze.goal_coordinate]
+        shortest_path = [node]
+        while node.coord != maze.start_coordinate:
+            node = node.prev
+            shortest_path.append(node)
+
+    print(f"Average steps for Dijkstra: {d_steps / steps}")
+    print(f"Average steps for A*: {a_steps / steps}")
+
+    #maze.draw_maze(distances=dist, shortest_path=shortest_path)
     print()
 
 
-def get_path(tags_file: Path, start: tuple[int, int], end: tuple[int, int], tile_size: float = 0.25,
+def get_path(tags_file: Path, start: Tuple[int, int], end: Tuple[int, int], tile_size: float = 0.25,
              wall_thickness: float = 0.003):
     maze = Maze.from_tags(tags_file)
     maze.start_coordinate = start
     maze.goal_coordinate = end
-    dist = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
+    dist, steps = a_star(maze.connectivity_matrix, maze.start_coordinate, maze.goal_coordinate)
 
     node = dist[maze.goal_coordinate]
     shortest_path = [node]
@@ -329,6 +345,6 @@ def get_path(tags_file: Path, start: tuple[int, int], end: tuple[int, int], tile
 
 
 if __name__ == "__main__":
-    # path = get_path(tags_file=Path('tags.yaml'), start=(1, 0), end=(2, 2))
-    # print(path)
-    main()
+    path = get_path(tags_file=Path('tags.yaml'), start=(1, 0), end=(2, 2))
+    print(path)
+    #main()
