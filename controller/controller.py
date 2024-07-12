@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys 
+import os
 import numpy as np
 import rospy
 import time
@@ -39,6 +40,9 @@ class Controller():
 
         #create a maze instance
         self.maze = MazeListener()
+
+
+        self.path = "src/controller/scripts/data.txt"
 
         #Robot parameters
         self.r_wheel: float = 0.063/2 #meters
@@ -144,7 +148,7 @@ class Controller():
 
         # error calculated by the controller, angle_error/4 describes the weight how much
         # pid should impact the calculation of the velocity vectors 
-        pid_error = self.pid.compute(angle_error/16)
+        pid_error = self.pid.compute(angle_error/8)
 
         #normalize the angle to range [-pi, pi]
         if angle_error > np.pi:
@@ -162,10 +166,13 @@ class Controller():
         self.u = (self.u_cont[0] + self.u_cont[1])/2
         #for angles between 0 and pi chassis should rotate counter clockwise 
         if np.pi > angle_error > 0:
-
+            
             #first calculate the error 
-            error_neg = (self.axle_length/16)*angle_error - pid_error
-            error_pos = (self.axle_length/16)*angle_error + pid_error
+            error_neg = (self.axle_length/8)*angle_error - pid_error
+            error_pos = (self.axle_length/8)*angle_error + pid_error
+
+            print("current positive error: " + str(error_pos))
+            print("current negative error: " + str(error_neg))
 
             if self.u_cont[0] > 0 and (self.u_cont[0] - error_neg) > 0:
                 if (self.u_cont[0] - error_neg) > self.u_max:
@@ -173,11 +180,19 @@ class Controller():
                 else:
                     self.u_cont[0] = self.u_cont[0] - error_neg
 
+            elif self.u_cont[0] > 0 and (self.u_cont[0] - error_neg) < 0:
+                self.u_cont[0] = 0
+
+            if self.u_cont[0] < 0 and (self.u_cont[0] - error_neg) > 0:
+                self.u_cont[0] = 0
+
             elif self.u_cont[0] < 0 and (self.u_cont[0] - error_neg) < 0:
+
                 if (self.u_cont[0] - error_neg) < self.u_min:
                     self.u_cont[0] = self.u_min
                 else:
                     self.u_cont[0] = self.u_cont[0] - error_neg
+            
 
             if self.u_cont[1] > 0 and (self.u_cont[1] + error_pos) > 0:
                 if (self.u_cont[1] + error_pos) > self.u_max:
@@ -185,11 +200,17 @@ class Controller():
                 else:
                     self.u_cont[1] = self.u_cont[1] + error_pos
 
-            elif self.u_cont[1] < 0 and (self.u_cont[1] + error_pos) < 0:
+            elif self.u_cont[1] > 0 and (self.u_cont[1] + error_pos) < 0:
+                self.u_cont[1] = 0
+
+            if self.u_cont[1] < 0 and (self.u_cont[1] + error_pos) < 0:
                 if (self.u_cont[1] + error_pos) < self.u_min:
                     self.u_cont[1] = self.u_min
                 else:
                     self.u_cont[1] = self.u_cont[1] + error_pos
+
+            elif self.u_cont[1] < 0 and (self.u_cont[1] + error_pos) > 0:
+                self.u_cont[1] = 0
 
         elif 0 > angle_error > -np.pi:
         #rotate clockwise 
@@ -198,17 +219,29 @@ class Controller():
             error_neg = (self.axle_length/16)*angle_error - pid_error
             error_pos = (self.axle_length/16)*angle_error + pid_error
 
+            print("current positive error: " + str(error_pos))
+            print("current negative error: " + str(error_neg))
+
+
             if self.u_cont[1] > 0 and (self.u_cont[1] - error_neg) > 0:
                 if (self.u_cont[1] - error_neg) > self.u_max:
                     self.u_cont[1] = self.u_max
                 else:
                     self.u_cont[1] = self.u_cont[1] - error_neg
 
+            elif self.u_cont[1] > 0 and (self.u_cont[1] - error_neg) < 0:
+                self.u_cont[1] = 0
+
+            if self.u_cont[1] < 0 and (self.u_cont[1] - error_neg) > 0:
+                self.u_cont[1] = 0
+
             elif self.u_cont[1] < 0 and (self.u_cont[1] - error_neg) < 0:
+
                 if (self.u_cont[1] - error_neg) < self.u_min:
                     self.u_cont[1] = self.u_min
                 else:
                     self.u_cont[1] = self.u_cont[1] - error_neg
+            
 
             if self.u_cont[0] > 0 and (self.u_cont[0] + error_pos) > 0:
                 if (self.u_cont[0] + error_pos) > self.u_max:
@@ -216,11 +249,17 @@ class Controller():
                 else:
                     self.u_cont[0] = self.u_cont[0] + error_pos
 
-            elif self.u_cont[0] < 0 and (self.u_cont[0] + error_pos) < 0:
+            elif self.u_cont[0] > 0 and (self.u_cont[0] + error_pos) < 0:
+                self.u_cont[0] = 0
+
+            if self.u_cont[0] < 0 and (self.u_cont[0] + error_pos) < 0:
                 if (self.u_cont[0] + error_pos) < self.u_min:
                     self.u_cont[0] = self.u_min
                 else:
                     self.u_cont[0] = self.u_cont[0] + error_pos
+
+            elif self.u_cont[0] < 0 and (self.u_cont[0] + error_pos) > 0:
+                self.u_cont[0] = 0
 
         return self.u_cont
     
@@ -231,7 +270,7 @@ class Controller():
         #update position based on perfect model
         self.u = (self.u_cont[0] + self.u_cont[1])/2
         #update the angle
-        self.theta = ((self.u_cont[0]*self.max_speed - self.u_cont[1]*self.max_speed)/self.axle_length)*self.dt
+        self.theta += ((self.u_cont[0]*self.max_speed - self.u_cont[1]*self.max_speed)/self.axle_length)*self.dt
         #pass the controller inputs to the motors
         self.adjust_position()
         #get new approximation for the position to 
@@ -241,11 +280,8 @@ class Controller():
             print("given position in x: " + str(position[0]) + " given position in y: " + str(position[1]))
             self.pos = position[0:2]
 
-        print("robot position in x: " + str(self.pos[0]) + " robot position in y: " + str(self.pos[1]))
-            
         print("control inputs: " + str(self.u_cont))
 
-        print("robot position in x: " + str(self.pos[0]) + " robot position in y: " + str(self.pos[1]))
         # local_pos = self.pos
 
 
@@ -287,6 +323,15 @@ class Controller():
         rospy.loginfo("Motorshutdown")
 
 def main():
+
+    # path = "src/controller/scripts"
+    # filename = "data.txt"
+
+    # file_path = os.path.join(path, filename)
+    # with open(file_path, "w") as file:
+    #     print("created data file")
+    #     file.write("data for the robot")
+
      #initialize rospy node
     rospy.init_node("controller_node", anonymous=True)
 
@@ -316,11 +361,18 @@ def main():
         #chassis is close enough to the coordinate, if not run the control loop
         while np.linalg.norm(robot_position[0:2] - coordinate) > controller.epsilon: 
             print("Going towards following cordinate:" + " in x: " + str(coordinate[0]) + " in y: " + str(coordinate[1]))
-            print("The angle of the robot is: " + str(controller.theta))
             position = listener.get_position()
-            controller.regelung(position[0:2], coordinate)
             print("The angle of the robot is: " + str(controller.theta))
+
+            # with open(path, "a", newline ="\n") as file:
+            #     location = "Going towards following cordinate:" + " in x: " + str(coordinate[0]) + " in y: " + str(coordinate[1]) + "\n"
+            #     angle = "The angle of the robot is " + str(controller.theta) + "\n"
+            #     coordinates = "The position of the robot is " + " in x: " + str(position[0]) + " in y: " + str(position[1]) + "\n"
+            #     file.write(location)
+            #     file.write(angle)
+            #     file.write(coordinates)
             if position is not None:
+                controller.regelung(position[0:2], coordinate)
                 controller.pos = position
                 robot_position = position
 
