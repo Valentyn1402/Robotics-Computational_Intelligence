@@ -1,5 +1,6 @@
 import itertools
 import random
+import os
 import tkinter as tk
 from datetime import datetime
 from pathlib import Path
@@ -345,6 +346,7 @@ def get_path(tags_file: Path, start: Tuple[int, int], end: Tuple[int, int], tile
 
 
 if __name__ == "__main__":
-    path = get_path(tags_file=Path('tags.yaml'), start=(1, 0), end=(2, 2))
+    print(os.getcwd())
+    path = get_path(tags_file=Path('maze-solver/tags.yaml'), start=(1, 0), end=(2, 2))
     print(path)
     #main()
