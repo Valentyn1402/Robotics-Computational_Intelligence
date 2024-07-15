@@ -5,11 +5,11 @@ import os
 import numpy as np
 import rospy
 import time
+import matplotlib.pyplot as plt
 from pathlib import Path
 from std_msgs.msg import String
 from apriltag_ros.msg import AprilTagDetectionArray
 from motor.msg import MotorPWM
-# from maze_solver.main import get_path
 from get_position import MazeListener
 
 # from filterpy.kalman import KalmanFilter
@@ -35,9 +35,7 @@ class PIDController():
 
 class Controller():
 
-    def __init__(self, path: np.array, pub, theta: float = 0, epsilon: float = 0.2, dt: float = 0.1):
-
-
+    def __init__(self, path: list = None, theta: float = 0, epsilon: float = 0.05, delta: float = 0.2, dt: float = 0.1):
         #create a maze instance
         self.maze = MazeListener()
 
@@ -46,14 +44,16 @@ class Controller():
 
         #Robot parameters
         self.r_wheel: float = 0.063/2 #meters
-        self.axle_length: float = 0.5 #meters
+        self.axle_length: float = 0.095 #meters
         self.v: float = 0 #initial velocity 
         self.feedforward = False
-        self.max_speed = 0.838 # m/s -> at maximum input 
+        self.max_speed = 0.393 # m/s -> at maximum input 
+        self.max_speed_angular = 0.6
 
 
         #Controller parameters
         self.epsilon = epsilon #meters
+        self.delta = delta
         self.dt = dt
         self.path = path
 
@@ -118,20 +118,32 @@ class Controller():
 
     def adjust_position(self) -> None:
 
-        print("I in adjust position")
         msg = MotorPWM()
         msg.pwm_left = self.u_cont[0]
         msg.pwm_right = self.u_cont[1]
         self.pub.publish(msg)
-        print("I send a message: " + str(self.u_cont))
-        # if not rospy.is_shutdown():
-        #     print("I am in if")
-        #     msg = MotorPWM()
-        #     msg.pwm_left = u_cont[0]
-        #     msg.pwm_right = u_cont[1]
-        #     self.pub.publish(msg)
-        # else:
-        #     print("Im in else")
+        # print("I send a message: " + str(self.u_cont))
+
+    def update_velocity(self, prev_velocity, updated_velocity):
+        if prev_velocity > 0:
+            if updated_velocity >= 0:
+                return min(updated_velocity, self.u_max)
+            else:
+                return 0
+            
+        elif prev_velocity < 0:
+            if updated_velocity <= 0:
+                return max(updated_velocity, self.u_min)
+            else:
+                return 0
+        
+        else:
+            if updated_velocity > self.u_max:
+                return self.u_max
+            elif updated_velocity < self.u_min:
+                return self.u_min
+            else: 
+                return updated_velocity
 
     def calculate_inputs(self, current_pos: np.array, target_point: np.array ) -> np.array: 
     
@@ -144,123 +156,63 @@ class Controller():
         # angle is negative the robot has to turn clockwise and otherwise counter-clockwise
         angle_error = target_angle - self.theta
 
-        print("Current angle error:" + str(angle_error))
-
-        # error calculated by the controller, angle_error/4 describes the weight how much
+        # error calculated by the controller, angle_error/8 describes the weight how much
         # pid should impact the calculation of the velocity vectors 
         pid_error = self.pid.compute(angle_error/8)
 
         #normalize the angle to range [-pi, pi]
         if angle_error > np.pi:
             angle_error -= 2*np.pi
-        else:
+        elif angle_error < -np.pi:
             angle_error += 2*np.pi
+
+        print("Current angle error:" + str(angle_error))
         
         #if the velocity vector is not initialized 
-        if self.u_cont[0] == 0 and self.u_cont[0] == 0 and self.feedforward == False:
-            self.u_cont[0] = -self.u_max/2
-            self.u_cont[1] = -self.u_max/2 
-            self.u = (self.u_cont[0] + self.u_cont[1])/2
+        if (self.u_cont[0] == 0 and self.u_cont[0]) == 0 and self.feedforward == False:
+            self.u_cont[0] = self.u_min/2
+            self.u_cont[1] = self.u_min/2
             self.feedforward = True
 
         self.u = (self.u_cont[0] + self.u_cont[1])/2
+        #define the error variables
+        error_neg = -(self.axle_length/8)*angle_error - pid_error
+        error_pos = (self.axle_length/8)*angle_error + pid_error
         #for angles between 0 and pi chassis should rotate counter clockwise 
-        if np.pi > angle_error > 0:
+        if np.pi > angle_error > self.delta:
             
-            #first calculate the error 
-            error_neg = (self.axle_length/8)*angle_error - pid_error
-            error_pos = (self.axle_length/8)*angle_error + pid_error
+            #define update variables 
+            u_left_update = self.u_cont[0] + error_pos
+            u_right_update = self.u_cont[1] + error_neg
 
             print("current positive error: " + str(error_pos))
             print("current negative error: " + str(error_neg))
 
-            if self.u_cont[0] > 0 and (self.u_cont[0] - error_neg) > 0:
-                if (self.u_cont[0] - error_neg) > self.u_max:
-                    self.u_cont[0] = self.u_max
-                else:
-                    self.u_cont[0] = self.u_cont[0] - error_neg
+        elif -self.delta > angle_error > -np.pi:
+            #rotate clockwise 
+            #define update variables 
+            u_left_update = self.u_cont[0] + error_neg
+            u_right_update = self.u_cont[1] + error_pos
 
-            elif self.u_cont[0] > 0 and (self.u_cont[0] - error_neg) < 0:
-                self.u_cont[0] = 0
-
-            if self.u_cont[0] < 0 and (self.u_cont[0] - error_neg) > 0:
-                self.u_cont[0] = 0
-
-            elif self.u_cont[0] < 0 and (self.u_cont[0] - error_neg) < 0:
-
-                if (self.u_cont[0] - error_neg) < self.u_min:
-                    self.u_cont[0] = self.u_min
-                else:
-                    self.u_cont[0] = self.u_cont[0] - error_neg
-            
-
-            if self.u_cont[1] > 0 and (self.u_cont[1] + error_pos) > 0:
-                if (self.u_cont[1] + error_pos) > self.u_max:
-                    self.u_cont[1] = self.u_max
-                else:
-                    self.u_cont[1] = self.u_cont[1] + error_pos
-
-            elif self.u_cont[1] > 0 and (self.u_cont[1] + error_pos) < 0:
-                self.u_cont[1] = 0
-
-            if self.u_cont[1] < 0 and (self.u_cont[1] + error_pos) < 0:
-                if (self.u_cont[1] + error_pos) < self.u_min:
-                    self.u_cont[1] = self.u_min
-                else:
-                    self.u_cont[1] = self.u_cont[1] + error_pos
-
-            elif self.u_cont[1] < 0 and (self.u_cont[1] + error_pos) > 0:
-                self.u_cont[1] = 0
-
-        elif 0 > angle_error > -np.pi:
-        #rotate clockwise 
             print("my angle is negative")
-             #first calculate the error 
-            error_neg = (self.axle_length/16)*angle_error - pid_error
-            error_pos = (self.axle_length/16)*angle_error + pid_error
 
-            print("current positive error: " + str(error_pos))
-            print("current negative error: " + str(error_neg))
-
-
-            if self.u_cont[1] > 0 and (self.u_cont[1] - error_neg) > 0:
-                if (self.u_cont[1] - error_neg) > self.u_max:
-                    self.u_cont[1] = self.u_max
-                else:
-                    self.u_cont[1] = self.u_cont[1] - error_neg
-
-            elif self.u_cont[1] > 0 and (self.u_cont[1] - error_neg) < 0:
-                self.u_cont[1] = 0
-
-            if self.u_cont[1] < 0 and (self.u_cont[1] - error_neg) > 0:
-                self.u_cont[1] = 0
-
-            elif self.u_cont[1] < 0 and (self.u_cont[1] - error_neg) < 0:
-
-                if (self.u_cont[1] - error_neg) < self.u_min:
-                    self.u_cont[1] = self.u_min
-                else:
-                    self.u_cont[1] = self.u_cont[1] - error_neg
+        else: 
+            # u_left_update = self.u_max/2
+            # u_right_update = self.u_max/2
+            u_left_update = self.u_min/2
+            u_right_update = self.u_min/2
             
+            # if self.u == 0:
+            #     # u_left_update = self.u_min/2
+            #     # u_right_update = self.u_min/2
+            #     u_left_update = self.u_max/2
+            #     u_right_update = self.u_max/2
+            # else:
+            #     u_left_update = self.u_cont[0]
+            #     u_right_update = self.u_cont[1]
 
-            if self.u_cont[0] > 0 and (self.u_cont[0] + error_pos) > 0:
-                if (self.u_cont[0] + error_pos) > self.u_max:
-                    self.u_cont[0] = self.u_max
-                else:
-                    self.u_cont[0] = self.u_cont[0] + error_pos
-
-            elif self.u_cont[0] > 0 and (self.u_cont[0] + error_pos) < 0:
-                self.u_cont[0] = 0
-
-            if self.u_cont[0] < 0 and (self.u_cont[0] + error_pos) < 0:
-                if (self.u_cont[0] + error_pos) < self.u_min:
-                    self.u_cont[0] = self.u_min
-                else:
-                    self.u_cont[0] = self.u_cont[0] + error_pos
-
-            elif self.u_cont[0] < 0 and (self.u_cont[0] + error_pos) > 0:
-                self.u_cont[0] = 0
-
+        self.u_cont[0] = self.update_velocity(self.u_cont[0], u_left_update)
+        self.u_cont[1] = self.update_velocity(self.u_cont[1], u_right_update)
         return self.u_cont
     
     def regelung(self, position, coordinate) -> None:
@@ -269,8 +221,10 @@ class Controller():
         print(self.calculate_inputs(position, coordinate))
         #update position based on perfect model
         self.u = (self.u_cont[0] + self.u_cont[1])/2
+        #update velocity 
+        self.v = np.absolute(self.u)*self.max_speed
         #update the angle
-        self.theta += ((self.u_cont[0]*self.max_speed - self.u_cont[1]*self.max_speed)/self.axle_length)*self.dt
+        self.theta += ((self.u_cont[0]*self.max_speed_angular - self.u_cont[1]*self.max_speed_angular)/self.axle_length)*self.dt
         #pass the controller inputs to the motors
         self.adjust_position()
         #get new approximation for the position to 
@@ -283,7 +237,6 @@ class Controller():
         print("control inputs: " + str(self.u_cont))
 
         # local_pos = self.pos
-
 
     def drive_path(self, location) -> None:
 
@@ -324,15 +277,10 @@ class Controller():
 
 def main():
 
-    # path = "src/controller/scripts"
-    # filename = "data.txt"
+    #initialize list of robot positions
+    robot_positions: list[np.array] = []
 
-    # file_path = os.path.join(path, filename)
-    # with open(file_path, "w") as file:
-    #     print("created data file")
-    #     file.write("data for the robot")
-
-     #initialize rospy node
+    #initialize rospy node
     rospy.init_node("controller_node", anonymous=True)
 
     #create a publisher node to 
@@ -343,7 +291,9 @@ def main():
     path = np.array([[0.131, 0.195], [0.131, 0.445], [0.131, 0.695], [0.445, 0.695], [0.445, 0.945]])
     print("initialized path array \n")
 
-    listener = MazeListener()
+    # #create mazelistener instance 
+    # listener = MazeListener()
+
     #create controller instance 
     controller = Controller(path, pub, theta=np.pi/2)
     print("initialized controller instance \n")
@@ -356,27 +306,30 @@ def main():
     #go through each point in the path in order
     for coordinate in path:
 
-        print("Going towards following cordinate:" + " in x: " + str(coordinate[0]) + " in y: " + str(coordinate[1]))
-        #for each point check if the distance between the middle point of the
-        #chassis is close enough to the coordinate, if not run the control loop
-        while np.linalg.norm(robot_position[0:2] - coordinate) > controller.epsilon: 
+        if rospy.is_shutdown():
+            break
+        else: 
             print("Going towards following cordinate:" + " in x: " + str(coordinate[0]) + " in y: " + str(coordinate[1]))
-            position = listener.get_position()
-            print("The angle of the robot is: " + str(controller.theta))
-
-            # with open(path, "a", newline ="\n") as file:
-            #     location = "Going towards following cordinate:" + " in x: " + str(coordinate[0]) + " in y: " + str(coordinate[1]) + "\n"
-            #     angle = "The angle of the robot is " + str(controller.theta) + "\n"
-            #     coordinates = "The position of the robot is " + " in x: " + str(position[0]) + " in y: " + str(position[1]) + "\n"
-            #     file.write(location)
-            #     file.write(angle)
-            #     file.write(coordinates)
-            if position is not None:
+            #for each point check if the distance between the middle point of the
+            #chassis is close enough to the coordinate, if not run the control loop
+            while np.linalg.norm(robot_position[0:2] - coordinate) > controller.epsilon: 
+                print("still driving towards following cordinate:" + " in x: " + str(coordinate[0]) + " in y: " + str(coordinate[1]))
+                if rospy.is_shutdown():
+                    break
+                # position = listener.get_position()
+                position = controller.pos   
+                print("Robot position is:" + " in x: " + str(position[0]) + " in y: " + str(position[1]))               
+                print("The angle of the robot is: " + str(controller.theta))
                 controller.regelung(position[0:2], coordinate)
-                controller.pos = position
-                robot_position = position
+                robot_position[0] += controller.v*np.cos(controller.theta)*controller.dt
+                robot_position[1] += controller.v*np.sin(controller.theta)*controller.dt
+                robot_positions.append(robot_position)
+                # if position is not None:
+                #     controller.regelung(position[0:2], coordinate)
+                #     controller.pos = position
+                #     robot_position = position
 
-            time.sleep(controller.dt)
+                time.sleep(controller.dt)
                 
     #when goal is reached rosshutdown
     stop_msg = MotorPWM()
@@ -385,9 +338,24 @@ def main():
     pub.publish(stop_msg)
 
     rospy.loginfo("Motorshutdown")
-# path = get_path(tags, (0, 0), (0, 3)
 
-# rospy.spin()
+    #create a figure and axis 
+    fig, ax = plt.subplots()
+
+    #plot the path in blue at the beginning
+    ax.plot(path[:, 0], path[:,1], "o--", label = "Path")
+
+    #plot the driven path
+    ax.plot(robot_positions[:, 0], robot_positions[:,1], "ro", label = "Driven Path")
+
+    #Set plot limits
+    ax.set_xlim(0,4)
+    ax.set_ylim(0,4)    
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.legend()
+    plt.show()
+
 
 if __name__ == "__main__":
     main()
